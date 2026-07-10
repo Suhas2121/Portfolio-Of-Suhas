@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suhas D — Data Analyst</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a12;
+    --surface:#141224;
+    --surface-2:#1c1832;
+    --border: rgba(139,92,246,.18);
+    --border-strong: rgba(139,92,246,.35);
+    --purple:#8b5cf6;
+    --purple-light:#c4b5fd;
+    --purple-dark:#5b21b6;
+    --text:#ece9f7;
+    --muted:#8d89a3;
+    --green:#4ade80;
+    --max: 1120px;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+
+  body::before{
+    content:'';
+    position:fixed;
+    inset:0;
+    background:
+      radial-gradient(circle at 15% 10%, rgba(139,92,246,.14), transparent 40%),
+      radial-gradient(circle at 85% 60%, rgba(139,92,246,.08), transparent 45%);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .wrap{max-width:var(--max); margin:0 auto; padding:0 28px; position:relative; z-index:1;}
+
+  h1,h2,h3,.display{font-family:'Space Grotesk', sans-serif;}
+
+  .mono{font-family:'JetBrains Mono', monospace;}
+
+  a{color:inherit; text-decoration:none;}
+
+  ::selection{background:var(--purple); color:#fff;}
+
+  /* ---------- NAV ---------- */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background:rgba(10,10,18,.75);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 28px; max-width:var(--max); margin:0 auto;
+  }
+  .logo{font-family:'JetBrains Mono', monospace; font-weight:600; font-size:1.05rem; letter-spacing:.5px;}
+  .logo span{color:var(--purple-light);}
+  .navlinks{display:flex; gap:32px; font-size:.92rem;}
+  .navlinks a{color:var(--muted); transition:color .2s; position:relative;}
+  .navlinks a:hover, .navlinks a:focus-visible{color:var(--text);}
+  .navlinks a::before{content:'-- ';color:var(--purple-light); opacity:0;transition:opacity .2s;}
+  .navlinks a:hover::before{opacity:1;}
+  .navtoggle{display:none; background:none; border:none; color:var(--text); font-size:1.5rem; cursor:pointer;}
+
+  @media (max-width:760px){
+    .navlinks{
+      position:fixed; top:64px; right:0; left:0; background:var(--surface);
+      flex-direction:column; padding:20px 28px; gap:18px;
+      border-bottom:1px solid var(--border);
+      transform:translateY(-130%); transition:transform .3s ease;
+    }
+    .navlinks.open{transform:translateY(0);}
+    .navtoggle{display:block;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    min-height:100vh; display:flex; align-items:center;
+    padding-top:110px; padding-bottom:60px;
+    position:relative;
+  }
+  .hero-grid{
+    display:grid; grid-template-columns:1.1fr 1fr; gap:56px; align-items:center;
+  }
+  @media (max-width:900px){ .hero-grid{grid-template-columns:1fr; gap:40px;} }
+
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace; color:var(--purple-light);
+    font-size:.85rem; letter-spacing:.5px; margin-bottom:18px; display:inline-block;
+  }
+  .eyebrow::before{content:'-- '; color:var(--muted);}
+
+  .hero h1{
+    font-size:clamp(2.4rem, 5.5vw, 4.2rem);
+    line-height:1.05; font-weight:700; margin-bottom:14px;
+  }
+  .hero h1 .accent{color:var(--purple-light);}
+  .hero .role{
+    font-size:1.25rem; color:var(--purple-light); font-weight:500; margin-bottom:20px;
+    font-family:'JetBrains Mono', monospace;
+  }
+  .hero .tagline{color:var(--muted); font-size:1.05rem; max-width:520px; margin-bottom:32px;}
+
+  .cta-row{display:flex; gap:16px; flex-wrap:wrap;}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:13px 26px; border-radius:8px; font-weight:600; font-size:.95rem;
+    cursor:pointer; border:1px solid transparent; transition:transform .18s, box-shadow .18s, background .18s;
+  }
+  .btn-primary{background:var(--purple); color:#fff;}
+  .btn-primary:hover{transform:translateY(-2px); box-shadow:0 10px 30px -8px rgba(139,92,246,.6);}
+  .btn-ghost{border-color:var(--border-strong); color:var(--text);}
+  .btn-ghost:hover{background:var(--surface-2); transform:translateY(-2px);}
+
+  /* Terminal */
+  .terminal{
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:12px; overflow:hidden;
+    box-shadow:0 20px 60px -20px rgba(139,92,246,.35);
+  }
+  .terminal-bar{
+    display:flex; align-items:center; gap:8px; padding:12px 16px;
+    background:var(--surface-2); border-bottom:1px solid var(--border);
+  }
+  .dot{width:10px; height:10px; border-radius:50%;}
+  .dot.r{background:#ff5f56;} .dot.y{background:#ffbd2e;} .dot.g{background:#27c93f;}
+  .terminal-title{margin-left:8px; font-family:'JetBrains Mono', monospace; font-size:.78rem; color:var(--muted);}
+  .terminal-body{
+    padding:22px 20px; font-family:'JetBrains Mono', monospace; font-size:.88rem;
+    min-height:260px;
+  }
+  .terminal-body .prompt{color:var(--green);}
+  #typed-query{color:var(--text); white-space:pre-wrap; word-break:break-word;}
+  .cursor{display:inline-block; width:8px; height:1.1em; background:var(--purple-light); vertical-align:text-bottom; animation:blink 1s step-end infinite;}
+  @keyframes blink{50%{opacity:0;}}
+
+  .result-table{margin-top:18px; opacity:0; transform:translateY(6px); transition:opacity .5s ease, transform .5s ease;}
+  .result-table.show{opacity:1; transform:translateY(0);}
+  .result-table table{width:100%; border-collapse:collapse; font-size:.82rem;}
+  .result-table th{
+    text-align:left; color:var(--purple-light); border-bottom:1px solid var(--border-strong);
+    padding:6px 10px; font-weight:600;
+  }
+  .result-table td{padding:6px 10px; border-bottom:1px solid var(--border); color:var(--text);}
+  .result-table .status{color:var(--green);}
+  .rows-note{color:var(--muted); font-size:.78rem; margin-top:10px;}
+
+  /* ---------- SECTIONS ---------- */
+  section{padding:100px 0;}
+  .section-head{margin-bottom:48px;}
+  .section-head h2{font-size:clamp(1.8rem, 3.5vw, 2.6rem); font-weight:700;}
+  .section-head p{color:var(--muted); max-width:600px; margin-top:10px;}
+
+  .reveal{opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease;}
+  .reveal.in-view{opacity:1; transform:translateY(0);}
+
+  /* About */
+  .about-grid{display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start;}
+  @media (max-width:800px){.about-grid{grid-template-columns:1fr;}}
+  .about-text p{color:var(--muted); margin-bottom:16px; font-size:1.02rem;}
+  .about-facts{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  .fact-card{
+    background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:18px;
+  }
+  .fact-card .label{font-family:'JetBrains Mono', monospace; font-size:.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:.5px;}
+  .fact-card .value{font-size:1rem; margin-top:6px; font-weight:600;}
+
+  /* Skills - schema style */
+  .schema-group{margin-bottom:36px;}
+  .schema-name{
+    font-family:'JetBrains Mono', monospace; color:var(--purple-light); font-size:.95rem;
+    margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid var(--border);
+    display:flex; align-items:center; gap:8px;
+  }
+  .schema-name::before{content:'▸'; color:var(--muted);}
+  .skill-cols{display:grid; grid-template-columns:repeat(auto-fill, minmax(230px,1fr)); gap:14px;}
+  .skill-card{
+    background:var(--surface); border:1px solid var(--border); border-radius:10px;
+    padding:16px 18px; transition:border-color .2s, transform .2s;
+  }
+  .skill-card:hover{border-color:var(--border-strong); transform:translateY(-3px);}
+  .skill-row{display:flex; justify-content:space-between; align-items:center;}
+  .skill-name{font-weight:600; font-size:.98rem;}
+  .skill-type{
+    font-family:'JetBrains Mono', monospace; font-size:.68rem; color:var(--purple-light);
+    background:rgba(139,92,246,.12); padding:3px 8px; border-radius:5px;
+  }
+  .skill-desc{color:var(--muted); font-size:.82rem; margin-top:8px; font-family:'JetBrains Mono', monospace;}
+
+  /* Experience timeline */
+  .timeline{position:relative; padding-left:32px;}
+  .timeline::before{content:''; position:absolute; left:6px; top:6px; bottom:6px; width:1px; background:var(--border-strong);}
+  .tl-item{position:relative; margin-bottom:36px;}
+  .tl-item:last-child{margin-bottom:0;}
+  .tl-item::before{
+    content:''; position:absolute; left:-32px; top:4px; width:13px; height:13px; border-radius:50%;
+    background:var(--bg); border:2px solid var(--purple-light);
+  }
+  .tl-date{font-family:'JetBrains Mono', monospace; font-size:.78rem; color:var(--purple-light); margin-bottom:6px;}
+  .tl-item h3{font-size:1.1rem; margin-bottom:6px;}
+  .tl-item p{color:var(--muted); font-size:.95rem;}
+
+  /* Projects */
+  .project-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:24px;}
+  .project-card{
+    background:var(--surface); border:1px solid var(--border); border-radius:12px;
+    padding:26px; display:flex; flex-direction:column; transition:transform .25s, border-color .25s;
+  }
+  .project-card:hover{transform:translateY(-6px); border-color:var(--border-strong);}
+  .project-num{font-family:'JetBrains Mono', monospace; color:var(--muted); font-size:.78rem; margin-bottom:10px;}
+  .project-card h3{font-size:1.15rem; margin-bottom:10px;}
+  .project-card p{color:var(--muted); font-size:.92rem; margin-bottom:14px; flex-grow:1;}
+  .tech-tags{display:flex; flex-wrap:wrap; gap:8px;}
+  .tech-tag{
+    font-family:'JetBrains Mono', monospace; font-size:.7rem; color:var(--purple-light);
+    border:1px solid var(--border-strong); padding:4px 9px; border-radius:6px;
+  }
+
+  /* Education */
+  .edu-card{
+    background:var(--surface); border:1px solid var(--border); border-radius:12px;
+    padding:30px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:16px; align-items:center;
+  }
+  .edu-card h3{font-size:1.2rem; margin-bottom:6px;}
+  .edu-card .school{color:var(--purple-light); font-family:'JetBrains Mono', monospace; font-size:.9rem;}
+  .edu-date{
+    font-family:'JetBrains Mono', monospace; font-size:.85rem; color:var(--muted);
+    border:1px solid var(--border-strong); padding:6px 14px; border-radius:20px;
+  }
+
+  /* Contact */
+  .contact-box{
+    background:linear-gradient(135deg, var(--surface), var(--surface-2));
+    border:1px solid var(--border-strong); border-radius:16px; padding:52px 40px; text-align:center;
+  }
+  .contact-box h2{font-size:clamp(1.8rem,4vw,2.6rem); margin-bottom:14px;}
+  .contact-box p{color:var(--muted); max-width:480px; margin:0 auto 32px;}
+  .contact-links{display:flex; justify-content:center; gap:16px; flex-wrap:wrap;}
+  .contact-pill{
+    display:flex; align-items:center; gap:8px; padding:11px 20px; border-radius:30px;
+    border:1px solid var(--border-strong); font-size:.9rem; font-family:'JetBrains Mono', monospace;
+    transition:background .2s, transform .2s;
+  }
+  .contact-pill:hover{background:var(--purple); transform:translateY(-2px);}
+
+  footer{
+    text-align:center; padding:32px 0; color:var(--muted); font-size:.85rem;
+    font-family:'JetBrains Mono', monospace; border-top:1px solid var(--border);
+  }
+  footer span{color:var(--purple-light);}
+
+  /* focus visibility */
+  a:focus-visible, button:focus-visible{outline:2px solid var(--purple-light); outline-offset:3px;}
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo">suhas<span>.d</span></div>
+    <button class="navtoggle" id="navToggle" aria-label="Toggle menu">☰</button>
+    <div class="navlinks" id="navLinks">
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#education">Education</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">portfolio.sql</span>
+      <h1>Suhas D<br><span class="accent">turns raw data</span><br>into clear decisions.</h1>
+      <div class="role">Data Analyst</div>
+      <p class="tagline">Passionate about transforming raw data into meaningful insights through analysis and visualization — with a growing toolkit across SQL, Python, and BI platforms.</p>
+      <div class="cta-row">
+        <a href="#projects" class="btn btn-primary">View Projects</a>
+        <a href="#contact" class="btn btn-ghost">Get In Touch</a>
+      </div>
+    </div>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        <span class="terminal-title">suhas@analytics — mysql</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">mysql&gt;</span> <span id="typed-query"></span><span class="cursor" id="cursorBlink"></span>
+        <div class="result-table" id="resultTable">
+          <table>
+            <thead>
+              <tr><th>name</th><th>role</th><th>location</th><th>status</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Suhas D</td>
+                <td>Data Analyst</td>
+                <td>Bengaluru, IN</td>
+                <td class="status">open_to_work</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="rows-note">1 row in set (0.02 sec)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">about</span>
+      <h2>Query: who is Suhas?</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>I'm an aspiring data analyst currently completing my Bachelor of Computer Application at Bharathi College (Autonomous), Bengaluru. My interest lies in taking messy, raw datasets and shaping them into dashboards, reports, and queries that people can actually act on.</p>
+        <p>Over the course of my degree I've built a working foundation in SQL, Python, and Excel, and I'm comfortable navigating Power BI, Tableau, and MySQL to explore and present data. I enjoy the problem-solving side of analytics as much as the visualization side — figuring out the right query is often as satisfying as the chart it produces.</p>
+        <p>I'm looking for an entry-level Data Analyst role where I can keep building on this foundation while contributing real value to a team.</p>
+      </div>
+      <div class="about-facts reveal">
+        <div class="fact-card"><div class="label">Location</div><div class="value">Bengaluru, India</div></div>
+        <div class="fact-card"><div class="label">Focus</div><div class="value">Data Analysis</div></div>
+        <div class="fact-card"><div class="label">Degree</div><div class="value">BCA, 2023–2026</div></div>
+        <div class="fact-card"><div class="label">Status</div><div class="value">Open to Work</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">skills</span>
+      <h2>Schema of my toolkit</h2>
+      <p>The skills below, grouped like tables in a schema — the ones I reach for daily, the tools I navigate comfortably, and the soft skills that hold the work together.</p>
+    </div>
+
+    <div class="schema-group reveal">
+      <div class="schema-name">core_skills</div>
+      <div class="skill-cols">
+        <div class="skill-card">
+          <div class="skill-row"><span class="skill-name">SQL</span><span class="skill-type">CORE</span></div>
+          <div class="skill-desc">JOIN · GROUP BY · aggregates</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-row"><span class="skill-name">Python</span><span class="skill-type">CORE</span></div>
+          <div class="skill-desc">data scripting & automation</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-row"><span class="skill-name">Microsoft Excel</span><span class="skill-type">CORE</span></div>
+          <div class="skill-desc">pivot tables · formulas · charts</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-row"><span class="skill-name">PHP</span><span class="skill-type">CORE</span></div>
+          <div class="skill-desc">server-side scripting</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="schema-group reveal">
+      <div class="schema-name">tools_platforms</div>
+      <div class="skill-cols">
+        <div class="skill-card">
+          <div class="skill-row"><span class="skill-name">Power BI</span><span class="skill-type">TOOL</span></div>
+          <div class="skill-desc">interactive reporting</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-row"><span class="skill-name">Tableau</span><span class="skill-type">TOOL</span></div>
+          <div class="skill-desc">data visualization</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-row"><span class="skill-name">MySQL</span><span class="skill-type">TOOL</span></div>
+          <div class="skill-desc">database design & queries</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-row"><span class="skill-name">GitHub</span><span class="skill-type">TOOL</span></div>
+          <div class="skill-desc">version control</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-row"><span class="skill-name">VS Code</span><span class="skill-type">TOOL</span></div>
+          <div class="skill-desc">daily dev environment</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="schema-group reveal">
+      <div class="schema-name">soft_skills</div>
+      <div class="skill-cols">
+        <div class="skill-card">
+          <div class="skill-row"><span class="skill-name">Communication</span><span class="skill-type">SOFT</span></div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-row"><span class="skill-name">Problem Solving</span><span class="skill-type">SOFT</span></div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-row"><span class="skill-name">Teamwork</span><span class="skill-type">SOFT</span></div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-row"><span class="skill-name">Time Management</span><span class="skill-type">SOFT</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">experience</span>
+      <h2>Hands-on journey so far</h2>
+      <p>My experience has been built through self-directed, hands-on projects during my BCA program — each one chosen to strengthen a different part of the analytics stack.</p>
+    </div>
+    <div class="timeline reveal">
+      <div class="tl-item">
+        <div class="tl-date">2023 — Present</div>
+        <h3>Bachelor of Computer Application, Bharathi College</h3>
+        <p>Building a foundation across programming, databases, and computer vision while applying it through independent projects.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">Project</div>
+        <h3>Student Database Analysis (SQL)</h3>
+        <p>Designed and managed a MySQL database, writing queries with JOIN, GROUP BY, ORDER BY, and aggregate functions to generate reports.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">Project</div>
+        <h3>Sales Dashboard (Microsoft Excel)</h3>
+        <p>Built an interactive dashboard using pivot tables, charts, and slicers to analyze sales trends and support decision-making.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">Project</div>
+        <h3>Virtual Mouse Using Hand Gestures</h3>
+        <p>Developed a gesture-controlled virtual mouse with Python and computer vision — cursor movement, clicking, scrolling, and screenshots via webcam.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">projects</span>
+      <h2>Selected work</h2>
+    </div>
+    <div class="project-grid">
+      <div class="project-card reveal">
+        <div class="project-num">project.01</div>
+        <h3>Student Database Analysis</h3>
+        <p>Designed and managed a MySQL database from the ground up, writing analytical queries to generate real reports on student records.</p>
+        <div class="tech-tags">
+          <span class="tech-tag">MySQL</span>
+          <span class="tech-tag">SQL</span>
+          <span class="tech-tag">JOIN</span>
+          <span class="tech-tag">GROUP BY</span>
+        </div>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-num">project.02</div>
+        <h3>Sales Dashboard</h3>
+        <p>An interactive Excel dashboard using pivot tables, charts, slicers, and formulas to surface sales trends and KPIs for decision-making.</p>
+        <div class="tech-tags">
+          <span class="tech-tag">Microsoft Excel</span>
+          <span class="tech-tag">Pivot Tables</span>
+          <span class="tech-tag">Charts</span>
+        </div>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-num">project.03</div>
+        <h3>Virtual Mouse Using Hand Gestures</h3>
+        <p>A gesture-controlled virtual mouse driven by webcam input — supporting cursor movement, clicking, scrolling, and screenshots via computer vision.</p>
+        <div class="tech-tags">
+          <span class="tech-tag">Python</span>
+          <span class="tech-tag">OpenCV</span>
+          <span class="tech-tag">MediaPipe</span>
+          <span class="tech-tag">NumPy</span>
+          <span class="tech-tag">PyAutoGUI</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">education</span>
+      <h2>Academic background</h2>
+    </div>
+    <div class="edu-card reveal">
+      <div>
+        <h3>Bachelor of Computer Application</h3>
+        <div class="school">Bharathi College (Autonomous)</div>
+      </div>
+      <div class="edu-date">2023 — 2026</div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-box reveal">
+      <span class="eyebrow">contact</span>
+      <h2>Let's build something with data.</h2>
+      <p>Open to entry-level Data Analyst roles and collaborations. Reach out through any of the channels below.</p>
+      <div class="contact-links">
+        <a class="contact-pill" href="mailto:suhasd435@email.com">✉ suhasd435@email.com</a>
+        <a class="contact-pill" href="https://www.linkedin.com/in/suhas-d-7772a3420" target="_blank" rel="noopener">in/ LinkedIn</a>
+        <a class="contact-pill" href="https://github.com/Suhas2121" target="_blank" rel="noopener">⌥ GitHub</a>
+        <a class="contact-pill" href="tel:8867182411">☎ +91 88671 82411</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>SELECT * FROM opportunities WHERE fit = 'great';</span><br>
+  © 2026 Suhas D. Built with curiosity for data.
+</footer>
+
+<script>
+  // Mobile nav toggle
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting){
+        entry.target.classList.add('in-view');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // Typewriter effect for hero terminal
+  const query = "SELECT name, role, location, status FROM professionals WHERE name = 'Suhas D';";
+  const typedEl = document.getElementById('typed-query');
+  const resultTable = document.getElementById('resultTable');
+  const cursorEl = document.getElementById('cursorBlink');
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function typeQuery(){
+    if (prefersReduced){
+      typedEl.textContent = query;
+      resultTable.classList.add('show');
+      return;
+    }
+    let i = 0;
+    const speed = 28;
+    function step(){
+      if (i <= query.length){
+        typedEl.textContent = query.slice(0, i);
+        i++;
+        setTimeout(step, speed);
+      } else {
+        setTimeout(() => resultTable.classList.add('show'), 300);
+      }
+    }
+    step();
+  }
+
+  window.addEventListener('load', () => setTimeout(typeQuery, 500));
+</script>
+
+</body>
+</html>
